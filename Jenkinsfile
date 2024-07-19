@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    /var/jenkins_home/apache-maven-3.6.3/bin/mvn \
+                    /var/jenkins_home/apache-maven-3.9.8/bin/mvn \
                     --batch-mode -V -U -e clean verify \
                     -Dsurefire.useFile=false -Dmaven.test.failure.ignore
                 '''
@@ -19,13 +19,13 @@ pipeline {
         stage('Analysis') {
             steps {
                 sh '''
-                    /var/jenkins_home/apache-maven-3.6.3/bin/mvn \
+                    /var/jenkins_home/apache-maven-3.9.8/bin/mvn \
                     --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs
                 '''
             }
         }
     }
-    
+
     post {
         always {
             junit testResults: '**/target/surefire-reports/TEST-*.xml'
